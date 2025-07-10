@@ -1,39 +1,48 @@
+// server.js or index.js
 import express from "express";
 import { createServer } from "node:http";
-
 import { Server } from "socket.io";
-
 import mongoose from "mongoose";
 import { connectToSocket } from "./controllers/socketManager.js";
-
 import cors from "cors";
 import userRoutes from "./routes/users.routes.js";
+import dotenv from "dotenv";
+
+// Load environment variables
+dotenv.config();
 
 const app = express();
 const server = createServer(app);
+
+// Connect socket server
 const io = connectToSocket(server);
 
-
-app.set("port", (process.env.PORT || 8000))
+// Middleware
 app.use(cors());
 app.use(express.json({ limit: "40kb" }));
 app.use(express.urlencoded({ limit: "40kb", extended: true }));
 
+// Routes
 app.use("/api/v1/users", userRoutes);
 
+// Set port from .env
+const PORT = process.env.PORT || 8000;
+
+// Mongo URI
+const MONGO_URI = process.env.MONGO_URI;
+
 const start = async () => {
-    app.set("mongo_user")
-    const connectionDb = await mongoose.connect("mongodb+srv://kalyan021004:XsP1U2Blh8JzlhBL@taskmanger.kw7zvad.mongodb.net/?retryWrites=true&w=majority&appName=taskManger")
+    try {
+        const connectionDb = await mongoose.connect(MONGO_URI);
+        console.log(`✅ MongoDB connected: ${connectionDb.connection.host}`);
 
-    console.log(`MONGO Connected DB HOst: ${connectionDb.connection.host}`)
-    server.listen(app.get("port"), () => {
-        console.log("LISTENIN ON PORT 8000")
-    });
-
-
-
-}
-
-
+        server.listen(PORT, () => {
+            console.log(`🚀 Server listening on port ${PORT}`);
+        });
+    } catch (err) {
+        console.error("❌ Failed to connect to MongoDB", err);
+        process.exit(1);
+    }
+};
 
 start();
