@@ -94,3 +94,26 @@
   height: auto;
   border-radius: 20px;
 }
+.landingPageContainer {
+  min-height: 100vh;
+  background: url('/') no-repeat center center;
+  background-size: cover;
+  color: white;
+}
+.navlist p {
+  cursor: pointer;
+}
+
+.navlist .btn p {
+  margin: 0;
+}
+
+.landingMainContainer {
+  padding: 40px 20px;
+}
+.landingMain {
+  backdrop-filter: blur(4px);
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 1rem;
+  padding: 2rem;
+}
