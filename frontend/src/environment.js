@@ -1,6 +1,6 @@
 let IS_PROD = true;
-const server = IS_PROD ?
-    "https://freindsmeet.onrender.com" :
+const server = 
+  
 
     "http://localhost:8000"
 

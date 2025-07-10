@@ -15,56 +15,47 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { AuthContext } from '../contexts/AuthContext';
 import { Snackbar } from '@mui/material';
 
-
-
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
 
 export default function Authentication() {
 
-    
-
-    const [username, setUsername] = React.useState();
-    const [password, setPassword] = React.useState();
-    const [name, setName] = React.useState();
-    const [error, setError] = React.useState();
-    const [message, setMessage] = React.useState();
-
+    // Fixed: Initialize with empty strings instead of undefined
+    const [username, setUsername] = React.useState('');
+    const [password, setPassword] = React.useState('');
+    const [name, setName] = React.useState('');
+    const [error, setError] = React.useState('');
+    const [message, setMessage] = React.useState('');
 
     const [formState, setFormState] = React.useState(0);
 
-    const [open, setOpen] = React.useState(false)
-
+    const [open, setOpen] = React.useState(false);
 
     const { handleRegister, handleLogin } = React.useContext(AuthContext);
 
     let handleAuth = async () => {
         try {
             if (formState === 0) {
-
-                let result = await handleLogin(username, password)
-
-
+                let result = await handleLogin(username, password);
             }
             if (formState === 1) {
                 let result = await handleRegister(name, username, password);
                 console.log(result);
                 setUsername("");
+                setName("");
                 setMessage(result);
                 setOpen(true);
-                setError("")
-                setFormState(0)
-                setPassword("")
+                setError("");
+                setFormState(0);
+                setPassword("");
             }
         } catch (err) {
-
             console.log(err);
             let message = (err.response.data.message);
             setError(message);
         }
     }
-
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -98,7 +89,6 @@ export default function Authentication() {
                             <LockOutlinedIcon />
                         </Avatar>
 
-
                         <div>
                             <Button variant={formState === 0 ? "contained" : ""} onClick={() => { setFormState(0) }}>
                                 Sign In
@@ -113,9 +103,9 @@ export default function Authentication() {
                                 margin="normal"
                                 required
                                 fullWidth
-                                id="username"
+                                id="name"
                                 label="Full Name"
-                                name="username"
+                                name="name"
                                 value={name}
                                 autoFocus
                                 onChange={(e) => setName(e.target.value)}
@@ -131,7 +121,6 @@ export default function Authentication() {
                                 value={username}
                                 autoFocus
                                 onChange={(e) => setUsername(e.target.value)}
-
                             />
                             <TextField
                                 margin="normal"
@@ -142,11 +131,10 @@ export default function Authentication() {
                                 value={password}
                                 type="password"
                                 onChange={(e) => setPassword(e.target.value)}
-
                                 id="password"
                             />
 
-                            <p style={{ color: "red" }}>{error}</p>
+                            {error && <p style={{ color: "red" }}>{error}</p>}
 
                             <Button
                                 type="button"
@@ -164,10 +152,10 @@ export default function Authentication() {
             </Grid>
 
             <Snackbar
-
                 open={open}
                 autoHideDuration={4000}
                 message={message}
+                onClose={() => setOpen(false)}
             />
 
         </ThemeProvider>
