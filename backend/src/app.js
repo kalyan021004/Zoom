@@ -4,6 +4,7 @@ import { Server } from "socket.io";
 import mongoose from "mongoose";
 import { connectToSocket } from "./controllers/socketManager.js";
 import cors from "cors";
+import userRoutes from "./routes/users.routes.js"
 
 const app = express();
 const server = createServer(app);
@@ -31,6 +32,7 @@ app.get("/test", (req, res) => {
 app.post("/api/v1/users/test-direct", (req, res) => {
     res.json({ message: "Direct route working!", body: req.body });
 });
+app.use("/api/v1/users",userRoutes);
 
 // Try to import routes
 console.log("=== ATTEMPTING TO IMPORT ROUTES ===");
